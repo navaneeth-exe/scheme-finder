@@ -48,18 +48,18 @@ export default function LandingPage() {
 
         <div className="flex flex-col sm:flex-row gap-4 w-full max-w-sm">
           <Link
-            href="/onboarding"
-            className="flex items-center justify-center gap-2 h-12 px-6 rounded-full bg-primary text-primary-foreground font-medium text-base hover:bg-primary/90 transition-colors w-full"
+            href="/login"
+            className="flex-1 inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
           >
-            Check My Benefits
-            <ArrowRight className="h-4 w-4" />
+            Get Started
+            <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
           <button
             onClick={handleDemoMode}
             disabled={loading}
-            className="flex items-center justify-center gap-2 h-12 px-6 rounded-full border font-medium text-base hover:bg-muted transition-colors w-full disabled:opacity-60"
+            className="flex-1 inline-flex h-12 items-center justify-center rounded-full border border-input bg-background px-8 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50"
           >
-            {loading ? "Setting up..." : "Try Demo"}
+            {loading ? "Loading..." : "Try Demo"}
           </button>
         </div>
 

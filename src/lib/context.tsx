@@ -29,6 +29,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isDemoMode, setIsDemoMode] = useState(false);
 
   useEffect(() => {
+    // Check Demo Mode
     const storedDemo = localStorage.getItem(DEMO_KEY);
     if (storedDemo === "true") {
       setIsDemoMode(true);
@@ -36,9 +37,26 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       setProfileState(DEMO_PROFILE);
       return;
     }
+
+    // Check Local Storage Profile
     const storedId = localStorage.getItem(STORAGE_KEY);
     if (storedId) setUserId(storedId);
-  }, []);
+
+    // Listen to real Supabase Auth
+    import("@/lib/supabase").then(({ supabase }) => {
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session?.user && !isDemoMode) {
+          setUserId(session.user.id);
+        }
+      });
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        if (!isDemoMode) {
+          setUserId(session?.user?.id || null);
+        }
+      });
+      return () => subscription.unsubscribe();
+    });
+  }, [isDemoMode]);
 
   const setProfile = useCallback((p: UserProfile) => {
     setProfileState(p);

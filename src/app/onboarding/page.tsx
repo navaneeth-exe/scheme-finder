@@ -149,8 +149,7 @@ export default function OnboardingPage() {
               />
             </div>
           ))}
-
-          <ParsedField label="Annual Income (₹)" value={parsed.annual_income?.toLocaleString("en-IN")} placeholder="e.g., 250000" onChange={v => setParsed(p => ({ ...p, annual_income: parseInt(v) || undefined }))} />
+          <ParsedField label="Annual Income (₹)" value={parsed.annual_income?.toString()} placeholder="e.g., 250000" onChange={v => setParsed(p => ({ ...p, annual_income: parseInt(v.replace(/\D/g, "")) || undefined }))} />
           
           <div>
             <label className="block text-sm font-medium mb-1">State</label>
