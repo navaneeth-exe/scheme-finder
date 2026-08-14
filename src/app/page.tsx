@@ -1,69 +1,129 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { ArrowRight, Zap, FileCheck, Mic, Shield } from "lucide-react";
+import { useApp } from "@/lib/context";
+import { setupDemoMode } from "@/lib/actions";
+import { useState } from "react";
+
+export default function LandingPage() {
+  const { enableDemoMode } = useApp();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  async function handleDemoMode() {
+    setLoading(true);
+    try {
+      await setupDemoMode();
+      enableDemoMode();
+      router.push("/dashboard");
+    } catch {
+      // Fallback: still enable demo mode with local data
+      enableDemoMode();
+      router.push("/dashboard");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen flex flex-col">
+      {/* Hero Section */}
+      <section className="flex-1 flex flex-col items-center justify-center px-4 py-20 text-center bg-gradient-to-b from-background to-muted/30">
+        <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-sm font-medium rounded-full px-4 py-1.5 mb-6">
+          <Zap className="h-3.5 w-3.5" />
+          <span>Smart Scheme Intelligence</span>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6 max-w-3xl">
+          Government Benefits.{" "}
+          <span className="text-primary">Made Actionable.</span>
+        </h1>
+
+        <p className="text-lg text-muted-foreground max-w-2xl mb-10">
+          SATURNX helps you discover, prepare and apply for government benefits you may be eligible for.
+          From eligibility to approval — every step guided.
+        </p>
+
+        <div className="flex flex-col sm:flex-row gap-4 w-full max-w-sm">
+          <Link
+            href="/onboarding"
+            className="flex items-center justify-center gap-2 h-12 px-6 rounded-full bg-primary text-primary-foreground font-medium text-base hover:bg-primary/90 transition-colors w-full"
           >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Check My Benefits
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+          <button
+            onClick={handleDemoMode}
+            disabled={loading}
+            className="flex items-center justify-center gap-2 h-12 px-6 rounded-full border font-medium text-base hover:bg-muted transition-colors w-full disabled:opacity-60"
           >
-            Documentation
-          </a>
+            {loading ? "Setting up..." : "Try Demo"}
+          </button>
         </div>
-      </main>
+
+        <p className="text-xs text-muted-foreground mt-4">
+          Discover and prepare for benefits you may be eligible for.
+          We do not guarantee government benefits.
+        </p>
+      </section>
+
+      {/* Feature Grid */}
+      <section className="border-t bg-background py-16 px-4">
+        <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-8">
+          {[
+            {
+              icon: Mic,
+              title: "Voice Onboarding",
+              desc: "Tell us about yourself in plain language. Our system extracts your profile automatically.",
+            },
+            {
+              icon: Shield,
+              title: "Benefit Intelligence",
+              desc: "Transparent, rule-based matching shows exactly why you qualify — no black boxes.",
+            },
+            {
+              icon: FileCheck,
+              title: "Application Readiness",
+              desc: "See what's missing before you apply. The system tracks every prerequisite.",
+            },
+            {
+              icon: Zap,
+              title: "SmartDoc Studio",
+              desc: "Prepare your passport photo (200×230, under 50KB) directly in the browser.",
+            },
+          ].map(({ icon: Icon, title, desc }) => (
+            <div key={title} className="flex gap-4">
+              <div className="shrink-0 h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Icon className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <h3 className="font-semibold mb-1">{title}</h3>
+                <p className="text-sm text-muted-foreground">{desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Journey Steps */}
+      <section className="bg-muted/30 py-16 px-4 border-t">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-2xl font-bold mb-8">Your Journey with SATURNX</h2>
+          <div className="flex flex-wrap justify-center gap-2 text-sm">
+            {[
+              "Profile", "Eligibility", "Prerequisites",
+              "Documents", "Application", "Tracking", "Resolution"
+            ].map((step, i, arr) => (
+              <span key={step} className="flex items-center gap-2">
+                <span className="bg-background border rounded-full px-4 py-2 font-medium">{step}</span>
+                {i < arr.length - 1 && <span className="text-muted-foreground">→</span>}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
