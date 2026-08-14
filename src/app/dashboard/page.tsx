@@ -10,6 +10,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { Badge } from "@/components/ui/badge";
 import { AlertTriangle, Clock, CheckCircle, XCircle, ArrowRight, Gift, Users, TrendingUp } from "lucide-react";
 import Link from "next/link";
+import { ProfileProgress } from "@/components/dashboard/ProfileProgress";
 
 export default function DashboardPage() {
   const { profile, userId, isDemoMode } = useApp();
@@ -92,6 +93,9 @@ export default function DashboardPage() {
           View all benefits <ArrowRight className="h-3.5 w-3.5" />
         </Link>
       </section>
+
+      {/* Profile Readiness */}
+      <ProfileProgress />
 
       {/* Action Required */}
       {urgentActions.length > 0 && (

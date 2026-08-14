@@ -7,6 +7,8 @@ import { useApp } from "@/lib/context";
 import { setupDemoMode } from "@/lib/actions";
 import { useState } from "react";
 
+import confetti from "canvas-confetti";
+
 export default function LandingPage() {
   const { enableDemoMode } = useApp();
   const router = useRouter();
@@ -17,11 +19,13 @@ export default function LandingPage() {
     try {
       await setupDemoMode();
       enableDemoMode();
-      router.push("/dashboard");
+      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+      setTimeout(() => router.push("/dashboard"), 500);
     } catch {
       // Fallback: still enable demo mode with local data
       enableDemoMode();
-      router.push("/dashboard");
+      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+      setTimeout(() => router.push("/dashboard"), 500);
     } finally {
       setLoading(false);
     }
